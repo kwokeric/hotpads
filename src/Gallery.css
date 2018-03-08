@@ -1,0 +1,44 @@
+.gallery-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: scroll;
+}
+.gallery {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  transition: 200ms ease;
+  overflow-x: scroll;
+  width: 80vw;
+}
+.image-container {
+  width: 80vw;
+}
+.image-container:not(:last-child) {
+  padding-right: 20px;
+}
+.image-container img {
+  width: 80vw;
+  object-fit: cover;
+}
+.left-btn, .right-btn {
+  width: 8vw;
+  height: 8vw;
+  margin: 1vw;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.left-btn:hover, .right-btn:hover {
+  cursor: pointer;
+}
+.left-btn img, .right-btn img {
+  width: 8vw;
+  height: 8vw;
+  object-fit: scale-down;
+}
