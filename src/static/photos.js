@@ -4,6 +4,9 @@ export const LANDSCAPES = [
     caption: "Grand Canyon, Utah, US"
   },
   {
+    caption: "THIS IS A BAD PHOTO"
+  },
+  {
     url: "https://www.rei.com/adventures/assets/adventures/images/trip/gallery/latinamerica/mpv_05",
     caption: "Machu Picchu, Peru"
   },

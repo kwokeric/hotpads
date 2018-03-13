@@ -118,15 +118,20 @@ class Gallery extends Component {
   }
 
   renderImages() {
-    return this.props.images.map((img, idx) => (
-      <div
-        className="image-container"
-        key={idx}
-        >
-        <img src={img.url} alt={img.caption} draggable="false" />
-        <div className="caption">{img.caption}</div>
-      </div>
-    ))
+    return this.props.images.map((img, idx) => {
+      if (img.url && img.caption) { // check for valid photo item
+        return (
+          <div
+            className="image-container"
+            key={idx}
+            >
+            <img src={img.url} alt={img.caption} draggable="false" />
+            <div className="caption">{img.caption}</div>
+            <div className="link"><a href={img.url}>source</a></div>
+          </div>
+        )
+      }
+    })
   }
 
   render() {
