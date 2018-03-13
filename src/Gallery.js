@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './Gallery.css';
-import { debounce } from './helpers/scroll.js'
+import { throttle } from './helpers/scroll.js'
 
 const LEFT_BTN = require('./static/left-btn.png')
 const RIGHT_BTN = require('./static/right-btn.png')
-// const THROTTLE_DELAY = 200;
+const THROTTLE_DELAY = 200;
 
 class Gallery extends Component {
   constructor(props) {
@@ -17,6 +17,8 @@ class Gallery extends Component {
     this.endSwipe = this.endSwipe.bind(this);
     this.scrollToLeft = this.scrollToLeft.bind(this);
     this.scrollToRight = this.scrollToRight.bind(this);
+    this.throttledScrollToLeft = throttle(this.scrollToLeft, THROTTLE_DELAY);
+    this.throttledScrollToRight = throttle(this.scrollToRight, THROTTLE_DELAY);
 
     this.state = {
       idx: 0,
@@ -31,6 +33,26 @@ class Gallery extends Component {
     this.setState({ isSwiping: true })
     let xStart = e.clientX;
     this.setState({ xStart });
+  }
+
+  handleMouseMove(e) {
+    if (!this.state.isSwiping) return
+
+    // mouse position in pixels
+    let xEnd = e.clientX;
+    // change mouse pos if within range
+    let xDragDistance = xEnd - this.state.xStart, xTransform = 0
+    let maxXTransform = - (this.props.images.length - 1 ) * window.innerWidth * 0.6;
+
+    if (this.state.xPos + xDragDistance > 0) {
+      xTransform = 0 - this.state.xPos;
+    } else if (this.state.xPos + xDragDistance < maxXTransform) {
+      xTransform = maxXTransform - this.state.xPos;
+    } else {
+      xTransform = xDragDistance;
+    }
+
+    this.setState({ xTransform });
   }
 
   handleMouseUp() {
@@ -64,25 +86,6 @@ class Gallery extends Component {
       xStart: 0,
       xTransform: 0
     }, this.updatePosition);
-  }
-
-  handleMouseMove(e) {
-    if (!this.state.isSwiping) return
-
-    // mouse position in pixels
-    let xEnd = e.clientX;
-    // change mouse pos if within range
-    let xDragDistance = xEnd - this.state.xStart, xTransform = 0
-    let maxXTransform = - (this.props.images.length - 1 ) * window.innerWidth * 0.6;
-    if (this.state.xPos + xDragDistance > 0) {
-      xTransform = 0 - this.state.xPos
-    } else if (this.state.xPos + xDragDistance < maxXTransform) {
-      xTransform = maxXTransform - this.state.xPos;
-    } else {
-      xTransform = xDragDistance;
-    }
-
-    this.setState({ xTransform });
   }
 
   updatePosition() {
@@ -130,7 +133,7 @@ class Gallery extends Component {
 
     return (
       <div className="gallery-container">
-        <div className="left-btn" onClick={this.scrollToLeft}>
+        <div className="left-btn" onClick={this.throttledScrollToLeft}>
           <img src={LEFT_BTN} alt="left-icon" />
         </div>
         <div className="gallery" onMouseOut={this.handleMouseUp}>
@@ -143,7 +146,7 @@ class Gallery extends Component {
             { this.renderImages() }
           </div>
         </div>
-        <div className="right-btn" onClick={this.scrollToRight}>
+        <div className="right-btn" onClick={this.throttledScrollToRight}>
           <img src={RIGHT_BTN} alt="right-icon" />
         </div>
 
