@@ -1,5 +1,6 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require('path'),
+    webpack = require('webpack'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
 
 module.exports = {
   entry: './js/main.js',  // single js entrypoint
@@ -8,7 +9,7 @@ module.exports = {
     filename: 'main.[hash].bundle.js'  // output with hashed added to output filename
   },
   module: {
-    loaders: [
+    rules: [
       {        // accepts either js or jsx
         test: /\.jsx?$/,
         loader: 'babel-loader',
@@ -17,8 +18,12 @@ module.exports = {
         }
       },
       {        // handles .scss extensions with has added to output filename
-        test: /\.scss$/,
-        loader: ['file?name=styles.[hash].css', 'css', 'sass']
+        test: /\.(s*)css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!cssnext-loader')
       },
       {        // handles .jpeg, .jpg, .png, and .gif extensions
         test: /\.(png|jpg|gif)$/,
@@ -26,23 +31,18 @@ module.exports = {
           'file-loader'
         ]
       },
-      {        // handles .svg extension
+      {        // handles .svg extension with 1mb limit
         test: /\.svg$/,
         use: [
-          'file-loader'
-        ]
-      }
-    ],
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
+          loader: 'url-loader',
+          query: { limit : 10000 }
         ]
       }
     ]
   },
+  plugins: [
+    new ExtractTextPlugin('./css/bundle.[hash].css'), // bundle.css with hash added to filename
+  ]
   stats: {
     colors: true
   },
