@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Gallery from './Gallery.js';
 import './App.css';
+import Gallery from './Gallery.js';
 import { LANDSCAPES, DOGS } from './static/photos.js'
 
 class App extends Component {
@@ -35,7 +35,7 @@ class App extends Component {
           Click on arrow buttons or swipe photos to see more.
         </header>
         <Gallery
-          images={this.state.photos[this.state.active]}
+          images={(this.state.photos[this.state.active]).filter(el => el.url && el.caption)}
           title={this.state.active}
           />
         <div className="footer-container">
