@@ -29,6 +29,12 @@ class Gallery extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.title !== nextProps.title) {
+      this.setState({ idx: 0, xPos: 0, isSwiping: true });
+    }
+  }
+
   handleMouseDown(e) {
     this.setState({ isSwiping: true })
     let xStart = e.clientX;
@@ -70,7 +76,6 @@ class Gallery extends Component {
     let halfWidth = Math.floor(window.innerWidth * 0.6 / 2);
 
     // check if the container has been scrolled past halfway
-    // debugger
     if (this.state.xTransform < 0 &&
       xPos + (this.state.idx * window.innerWidth * 0.6) < -halfWidth) {
       idx = this.state.idx + 1;
@@ -94,7 +99,7 @@ class Gallery extends Component {
 
   scrollToLeft() {
     if (this.state.idx > 0) {
-      let newIdx = this.state.idx - 1
+      let newIdx = this.state.idx - 1;
       this.setState({
         idx: newIdx,
         xPos: - newIdx * window.innerWidth * 0.61
@@ -149,7 +154,6 @@ class Gallery extends Component {
         <div className="right-btn" onClick={this.throttledScrollToRight}>
           <img src={RIGHT_BTN} alt="right-icon" />
         </div>
-
       </div>
     );
   }

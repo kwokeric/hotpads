@@ -19,7 +19,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  transition: 2500ms ease-in-out;
   width: 60vw;
   height: 100%;
 }
